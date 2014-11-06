@@ -3,12 +3,12 @@ use strict;
 use warnings;
 
 package suggested;
-# ABSTRACT: Load a suggested module and don't die if it doesn't exist
+# ABSTRACT: Load suggested modules on demand when available
 
 require recommended;
 
 our @ISA     = qw/recommended/;
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 1;
 
@@ -23,11 +23,11 @@ __END__
 
 =head1 NAME
 
-suggested - Load a suggested module and don't die if it doesn't exist
+suggested - Load suggested modules on demand when available
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
 =head1 SYNOPSIS
 

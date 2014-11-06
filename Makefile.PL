@@ -10,7 +10,7 @@ use ExtUtils::MakeMaker 6.17;
 
 
 my %WriteMakefileArgs = (
-  "ABSTRACT" => "Load a recommended module and don't die if it doesn't exist",
+  "ABSTRACT" => "Load recommended modules on demand when available",
   "AUTHOR" => "David Golden <dagolden\@cpan.org>",
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.17"
@@ -22,7 +22,7 @@ my %WriteMakefileArgs = (
   "NAME" => "recommended",
   "PREREQ_PM" => {
     "Carp" => 0,
-    "Module::Runtime" => 0,
+    "Module::Runtime" => "0.014",
     "strict" => 0,
     "version" => 0,
     "warnings" => 0
@@ -32,7 +32,7 @@ my %WriteMakefileArgs = (
     "File::Spec" => 0,
     "Test::More" => 0
   },
-  "VERSION" => "0.001",
+  "VERSION" => "0.002",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -43,7 +43,7 @@ my %FallbackPrereqs = (
   "Carp" => 0,
   "ExtUtils::MakeMaker" => "6.17",
   "File::Spec" => 0,
-  "Module::Runtime" => 0,
+  "Module::Runtime" => "0.014",
   "Test::More" => 0,
   "strict" => 0,
   "version" => 0,

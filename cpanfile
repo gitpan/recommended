@@ -1,5 +1,5 @@
 requires "Carp" => "0";
-requires "Module::Runtime" => "0";
+requires "Module::Runtime" => "0.014";
 requires "perl" => "5.008001";
 requires "strict" => "0";
 requires "version" => "0";

@@ -1,5 +1,5 @@
 ---
-abstract: "Load a recommended module and don't die if it doesn't exist"
+abstract: 'Load recommended modules on demand when available'
 author:
   - 'David Golden <dagolden@cpan.org>'
 build_requires:
@@ -28,13 +28,13 @@ no_index:
 provides:
   recommended:
     file: lib/recommended.pm
-    version: '0.001'
+    version: '0.002'
   suggested:
     file: lib/suggested.pm
-    version: '0.001'
+    version: '0.002'
 requires:
   Carp: '0'
-  Module::Runtime: '0'
+  Module::Runtime: '0.014'
   perl: '5.008001'
   strict: '0'
   version: '0'
@@ -43,5 +43,5 @@ resources:
   bugtracker: https://github.com/dagolden/recommended/issues
   homepage: https://github.com/dagolden/recommended
   repository: https://github.com/dagolden/recommended.git
-version: '0.001'
+version: '0.002'
 x_authority: cpan:DAGOLDEN

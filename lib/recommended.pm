@@ -3,13 +3,13 @@ use strict;
 use warnings;
 
 package recommended;
-# ABSTRACT: Load a recommended module and don't die if it doesn't exist
+# ABSTRACT: Load recommended modules on demand when available
 
 use version;
-use Carp            ();
-use Module::Runtime ();
+use Carp ();
+use Module::Runtime 0.014 (); # bugfixes for use_package_optimistically
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 # $MODULES{$type}{$caller}{$mod} = [$min_version, $satisfied]
 my %MODULES;
@@ -55,8 +55,12 @@ sub has {
         $ver = $spec->[0];
     }
 
-    local $@;
-    my $ok = eval { Module::Runtime::use_module( $mod, $ver ) };
+    # don't call with a version; we want this to die only on compile failure
+    Module::Runtime::use_package_optimistically($mod);
+
+    my $ok = $INC{ Module::Runtime::module_notional_filename($mod) }
+      && $mod->VERSION >= version->new($ver);
+
     return $spec->[1] = $ok ? 1 : 0;
 }
 
@@ -73,11 +77,11 @@ __END__
 
 =head1 NAME
 
-recommended - Load a recommended module and don't die if it doesn't exist
+recommended - Load recommended modules on demand when available
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
 =head1 SYNOPSIS
 
@@ -102,13 +106,23 @@ version 0.001
 
 =head1 DESCRIPTION
 
-This module tries to load recommended modules of particular minimum versions
-and provides means to check if they are loaded.  It is a thin veneer around
+This module gathers a list of recommended modules and versions and provides
+means to check if they are available.  It is a thin veneer around
 L<Module::Runtime>.
 
-The major benefit over using L<Module::Runtime> directly is that this allows
-you to self-document your recommended modules at the top of your code, while
-still loading them on demand elsewhere.
+There are two major benefits over using L<Module::Runtime> directly:
+
+=over 4
+
+=item *
+
+Self-documents recommended modules together with versions at the top of your code, while still loading them on demand elsewhere.
+
+=item *
+
+Dies if a recommended module exists but fails to compile, but doesn't die if the module is missing or the version is insufficient.  This is not something that L<Module::Runtime> offers in a single subroutine.
+
+=back
 
 =head1 USAGE
 
@@ -137,7 +151,7 @@ requirement and returns true if the following conditions are met:
 
 =item *
 
-the module was recommended (via C<use recommended>)
+the module was recommended in the current package (via C<use recommended>)
 
 =item *
 
@@ -149,12 +163,13 @@ the module meets the default or alternate minimum version
 
 =back
 
-Otherwise, it returns false.
+Otherwise, it returns false.  If the module exists but fails to compile, an
+error is thrown.  This avoids some edge-cases where things are left in an
+incomplete state or subsequent normal loads of the module by other packages get
+a misleading error.
 
 The module is loaded without invoking the module's C<import> method, as running
 import on an optional module at runtime is just weird.
-
-=for Pod::Coverage has
 
 =head1 SEE ALSO
 

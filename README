@@ -1,9 +1,8 @@
 NAME
-    recommended - Load a recommended module and don't die if it doesn't
-    exist
+    recommended - Load recommended modules on demand when available
 
 VERSION
-    version 0.001
+    version 0.002
 
 SYNOPSIS
         use recommended 'Foo::Bar', {
@@ -26,13 +25,19 @@ SYNOPSIS
         }
 
 DESCRIPTION
-    This module tries to load recommended modules of particular minimum
-    versions and provides means to check if they are loaded. It is a thin
-    veneer around Module::Runtime.
+    This module gathers a list of recommended modules and versions and
+    provides means to check if they are available. It is a thin veneer
+    around Module::Runtime.
 
-    The major benefit over using Module::Runtime directly is that this
-    allows you to self-document your recommended modules at the top of your
-    code, while still loading them on demand elsewhere.
+    There are two major benefits over using Module::Runtime directly:
+
+    *   Self-documents recommended modules together with versions at the top
+        of your code, while still loading them on demand elsewhere.
+
+    *   Dies if a recommended module exists but fails to compile, but
+        doesn't die if the module is missing or the version is insufficient.
+        This is not something that Module::Runtime offers in a single
+        subroutine.
 
 USAGE
   import
@@ -57,13 +62,17 @@ USAGE
     version requirement and returns true if the following conditions are
     met:
 
-    *   the module was recommended (via "use recommended")
+    *   the module was recommended in the current package (via "use
+        recommended")
 
     *   the module can be loaded
 
     *   the module meets the default or alternate minimum version
 
-    Otherwise, it returns false.
+    Otherwise, it returns false. If the module exists but fails to compile,
+    an error is thrown. This avoids some edge-cases where things are left in
+    an incomplete state or subsequent normal loads of the module by other
+    packages get a misleading error.
 
     The module is loaded without invoking the module's "import" method, as
     running import on an optional module at runtime is just weird.

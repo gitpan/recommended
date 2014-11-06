@@ -1,5 +1,5 @@
 {
-   "abstract" : "Load a recommended module and don't die if it doesn't exist",
+   "abstract" : "Load recommended modules on demand when available",
    "author" : [
       "David Golden <dagolden@cpan.org>"
    ],
@@ -50,7 +50,7 @@
       "runtime" : {
          "requires" : {
             "Carp" : "0",
-            "Module::Runtime" : "0",
+            "Module::Runtime" : "0.014",
             "perl" : "5.008001",
             "strict" : "0",
             "version" : "0",
@@ -72,11 +72,11 @@
    "provides" : {
       "recommended" : {
          "file" : "lib/recommended.pm",
-         "version" : "0.001"
+         "version" : "0.002"
       },
       "suggested" : {
          "file" : "lib/suggested.pm",
-         "version" : "0.001"
+         "version" : "0.002"
       }
    },
    "release_status" : "stable",
@@ -91,7 +91,7 @@
          "web" : "https://github.com/dagolden/recommended"
       }
    },
-   "version" : "0.001",
+   "version" : "0.002",
    "x_authority" : "cpan:DAGOLDEN"
 }
 
